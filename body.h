@@ -6,15 +6,15 @@
 
 class Body {
 	public:
-		Body(double rx, double ry, double vx, double vy, double mass);
-		void drawBody();
+		Body(double rx, double ry, double vx, double vy, double mass, SDL_Texture* bodyTexture, int w, int h);
+		void drawBody(int screenw, int screenh);
 		void update(double dt);
 		double distanceTo(Body b);
 		void resetForce();
 		void addForce(Body b);
 
-		SDL_Rect bodyRect = {0, 0, 32, 32};
-		SDL_Texture* bodyTexture;
+		SDL_Rect bodyRect;
+		SDL_Texture* bodyTexture = NULL;
 
 		double rx, ry; //coords
 		double vx, vy; //velocity

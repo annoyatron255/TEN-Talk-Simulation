@@ -11,24 +11,29 @@
 #define screenh 480
 
 const int numBodies = 3;
-const double timeStep = 1e8;
-Body bodies[numBodies] = {{375, 25, 0, 0, 50},{400, 400, 0, 0, 50},{250, 250, 0, 0, 150}};
+const double timeStep = 1e6;//1e8;
 
-void addForces() {
+void addForces(Body inputBodies[]) {
 	for (int i = 0; i < numBodies; i++) {
-		bodies[i].resetForce();
+		inputBodies[i].resetForce();
 		for (int j = 0; j < numBodies; j++) {
-			if (i != j) bodies[i].addForce(bodies[j]);
+			if (i != j) inputBodies[i].addForce(inputBodies[j]);
 		}	
 	}
 
 	for (int i = 0; i < numBodies; i++) {
-		bodies[i].update(timeStep); //Update with Timestep
+		inputBodies[i].update(timeStep); //Update with Timestep
 	}	
 }
 
 int main ( int argc, char** argv ) {
 	gfx::gfxinit(screenw, screenh); // open window with 640x480 res. 
+
+	Body bodies[numBodies] = {{0, 110, 1.8267e-6, 0, 1, gfx::createTexture("./gfx/earth.bmp"), 32, 32},
+       	                          {0, 240, 3.8583e-6, 0, 0.107, gfx::createTexture("./gfx/mars.bmp"), 32, 32},
+                                  {0, 0, 0, 0, 333000, gfx::createTexture("./gfx/sun.bmp"), 32, 32}};
+
+
 
 	//float fps, frames, frameStartTime, frameEndTime;
 
@@ -40,10 +45,10 @@ int main ( int argc, char** argv ) {
 		gfx::clearScreen(0, 0, 0);
 
 		//Main Logic
-		addForces();
+		addForces(bodies);
 
 		for (int i = 0; i < numBodies; i++) {
-			bodies[i].drawBody();
+			bodies[i].drawBody(screenw, screenh);
 		}	
 
 		//End Main Logic

@@ -4,12 +4,18 @@
 #include "body.h"
 #include "gfx.h"
 
-Body::Body(double rx, double ry, double vx, double vy, double mass) {
+Body::Body(double rx, double ry, double vx, double vy, double mass, SDL_Texture* bodyTexture, int w, int h) {
 	this->rx = rx;
 	this->ry = ry;
 	this->vx = vx;
 	this->vy = vy;
 	this->mass = mass;
+	this->bodyTexture = bodyTexture;
+	//bodyTexture = gfx::createTexture(file);//bodyTexture;
+	//if (bodyTexture == NULL) SDL_Log("ERROR");
+	//if (gfx::createTexture("./gfx/earth.bmp") == NULL) SDL_Log("error 2");
+	bodyRect.w = w;
+	bodyRect.h = h;
 }
 
 void Body::update(double dt) {
@@ -40,10 +46,14 @@ void Body::addForce(Body b) {
 	fy += F * dy / dist;
 }
 
-void Body::drawBody() {
-	bodyRect.w = 32;
-	bodyRect.h = 32;
-	bodyRect.x = ((int) round(rx)) - (bodyRect.w / 2);
-	bodyRect.y = ((int) round(ry)) - (bodyRect.h / 2);
-	gfx::drawRect(bodyRect, 255, 0, 0);
+void Body::drawBody(int screenw, int screenh) {
+	//bodyRect.w = 32;
+	//bodyRect.h = 32;
+	bodyRect.x = ((int) round(rx)) - (bodyRect.w / 2) + (screenw / 2);
+	bodyRect.y = ((int) round(ry)) - (bodyRect.h / 2) + (screenh / 2);
+	//bodyTexture = gfx::createTexture("./gfx/earth.bmp");
+	gfx::drawTexture(bodyTexture, bodyRect);
+	//if (gfx::createTexture("./gfx/earth.bmp") == NULL) SDL_Log("error 3");
+	//gfx::drawTexture(gfx::createTexture("./gfx/earth.bmp"), bodyRect);
+	//gfx::drawRect(bodyRect, 255, 0, 0);
 }
