@@ -43,7 +43,7 @@ void Body::addForce(Body b) {
 void Body::drawBody() {
 	bodyRect.w = 32;
 	bodyRect.h = 32;
-	bodyRect.x = ((int) round(rx));
-	bodyRect.y = ((int) round(ry));
+	bodyRect.x = ((int) round(rx)) - (bodyRect.w / 2);
+	bodyRect.y = ((int) round(ry)) - (bodyRect.h / 2);
 	gfx::drawRect(bodyRect, 255, 0, 0);
 }
