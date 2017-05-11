@@ -31,14 +31,13 @@ void Body::resetForce() {
 }
 
 void Body::addForce(Body b) {
-	Body a = *this;
 	double EPS = 3E4; //to avoid infinities
-	double dx = b.rx - a.rx;
-	double dy = b.ry - a.ry;
+	double dx = b.rx - rx;
+	double dy = b.ry - ry;
 	double dist = sqrt(dx*dx + dy*dy);
-	double F = (G * a.mass * b.mass) / (dist*dist + EPS*EPS);
-	a.fx += F * dx / dist;
-	a.fy += F * dy / dist;
+	double F = (G * mass * b.mass) / (dist*dist + EPS*EPS);
+	fx += F * dx / dist;
+	fy += F * dy / dist;
 }
 
 void Body::drawBody() {
