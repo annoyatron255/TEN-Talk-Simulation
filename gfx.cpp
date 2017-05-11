@@ -63,6 +63,10 @@ namespace gfx {
 		SDL_RenderCopy(m_gRenderer, texture, NULL, &rect);
 	}
 
+	void drawTexture(SDL_Texture* texture, SDL_Rect rect, double angle, SDL_Point center, SDL_RendererFlip flip) {
+		SDL_RenderCopyEx(m_gRenderer, texture, NULL, &rect, angle, &center, flip);
+	}
+
 	void drawLine(int x1, int y1, int x2, int y2, int r, int g, int b) {
 		SDL_SetRenderDrawColor( m_gRenderer, r, g, b, 0xFF );
 		SDL_RenderDrawLine(m_gRenderer, x1, y1, x2, y2);

@@ -5,15 +5,12 @@
 #include "gfx.h" // general gfx lib I made for SDL
 #include "input.h"
 #include "general.h"
-//#include "player.h"
 #include <iostream>
 #define screenw 640
 #define screenh 480
 
 int main ( int argc, char** argv ) {
 	//Load Classes
-	//Gfx gfx;
-	//Gfx Config
 	gfx::gfxinit(screenw, screenh); // open window with 640x480 res. 
 	SDL_Texture* s1Texture = gfx::createTexture("gfx/s1.bmp");
 	SDL_Texture* s1TextureShift = gfx::createTexture("gfx/s1sneek.bmp");
@@ -62,7 +59,7 @@ int main ( int argc, char** argv ) {
 		fps = frames / (SDL_GetTicks() / 1000);
 
 		if ((1000 / 60) < (frameEndTime - frameStartTime)) {
-		SDL_Delay((frameEndTime - frameStartTime) - (1000 / 60));
+			SDL_Delay((frameEndTime - frameStartTime) - (1000 / 60));
 		}
 	}
 
