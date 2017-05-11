@@ -6,11 +6,21 @@
 
 class Body {
 	public:
-		Body();
+		Body(double rx, double ry, double vx, double vy, double mass);
 		void drawBody();
+		void update(double dt);
+		double distanceTo(Body b);
+		void resetForce();
+		void addForce(Body b);
+
 		SDL_Rect bodyRect = {0, 0, 18, 24};
 		SDL_Texture* bodyTexture;
-	private:
 
+		double rx, ry; //coords
+		double vx, vy; //velocity
+		double fx, fy; //force
+		double mass;
+	private:
+		const double G = 6.673e-11;
 };
 #endif
