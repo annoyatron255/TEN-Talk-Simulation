@@ -42,5 +42,9 @@ void Body::addForce(Body b) {
 }
 
 void Body::drawBody() {
-	gfx::drawTexture(bodyTexture, bodyRect);
+	bodyRect.w = 32;
+	bodyRect.h = 32;
+	bodyRect.x = ((int) round(rx));
+	bodyRect.y = ((int) round(ry));
+	gfx::drawRect(bodyRect, 255, 0, 0);
 }

@@ -13,7 +13,7 @@ class Body {
 		void resetForce();
 		void addForce(Body b);
 
-		SDL_Rect bodyRect = {0, 0, 18, 24};
+		SDL_Rect bodyRect = {0, 0, 32, 32};
 		SDL_Texture* bodyTexture;
 
 		double rx, ry; //coords
