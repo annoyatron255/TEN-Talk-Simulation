@@ -17,7 +17,7 @@ namespace gfx {
 			if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) ) {
 				printf( "Warning: Linear texture filtering not enabled!" );
 			}
-			m_window = SDL_CreateWindow( "Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_SHOWN );
+			m_window = SDL_CreateWindow( "TEN Talk Simulation", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_SHOWN );
 			if(m_window == NULL) {
 				printf("Window Error! SDL_Error: %s\n", SDL_GetError());
 				return 1;
