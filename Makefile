@@ -1,7 +1,7 @@
 IDIR=./
 # IDIR=include
 CC=g++
-CFLAGS=-I$(IDIR) -std=c++11
+CFLAGS=-I$(IDIR) -std=c++11 -m64
 
 # ODIR=obj
 LDIR=./

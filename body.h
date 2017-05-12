@@ -7,7 +7,7 @@
 class Body {
 	public:
 		Body(double rx, double ry, double vx, double vy, double mass, SDL_Texture* bodyTexture, int w, int h);
-		void drawBody(int screenw, int screenh);
+		void drawBody(int screenw, int screenh, double vpx, double vpy, double vpw, double vph);
 		void update(double dt);
 		double distanceTo(Body b);
 		void resetForce();
