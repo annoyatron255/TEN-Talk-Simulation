@@ -15,12 +15,12 @@ namespace input {
 
 	bool getQuit() {
 		SDL_Event event;
+		bool returnState = false;
 		if (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT) {
-				return true; 
-			} else {
-				return false;
+				returnState = true; 
 			}
 		}
+		return returnState;
 	}
 }

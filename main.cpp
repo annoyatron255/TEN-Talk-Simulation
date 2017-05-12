@@ -10,8 +10,6 @@
 #define screenw 640
 #define screenh 640//480
 
-//const double rUniverse = 1e9;
-
 const int numBodies = 3;
 const double timeStep = 5;//1e8;
 
