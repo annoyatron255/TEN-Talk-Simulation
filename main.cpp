@@ -10,8 +10,8 @@
 #define screenw 640
 #define screenh 640//480
 
-const int numBodies = 3;
-const double timeStep = 5;//1e8;
+const int numBodies = 4;
+const double timeStep = 1;//1e8;
 
 void addForces(Body inputBodies[]) {
 	for (int i = 0; i < numBodies; i++) {
@@ -29,9 +29,11 @@ void addForces(Body inputBodies[]) {
 int main ( int argc, char** argv ) {
 	gfx::gfxinit(screenw, screenh); // open window with 640x480 res. 
 
-	Body bodies[numBodies] = {{0, 1.496e8, 941976.6599, 0, 5.972e24, gfx::createTexture("./gfx/earth.bmp"), 32, 32},
-       	                          {0, 2.229e8, 771703.2377, 0, 6.39e23, gfx::createTexture("./gfx/mars.bmp"), 25, 25},
-                                  {0, 0, 0, 0, 1.989e30, gfx::createTexture("./gfx/sun.bmp"), 100, 100}};
+	Body bodies[numBodies] = {{1.496e8, 0, 0, 941976.6599, 5.972e24, gfx::createTexture("./gfx/earth.bmp"), 32, 32},
+       	                          //{-2.279e8, 0, 0, -763068.101, 6.39e23, gfx::createTexture("./gfx/mars.bmp"), 25, 25},
+                                  {1.639e8, 1.583e8, -530072, 548905, 6.39e23, gfx::createTexture("./gfx/mars.bmp"), 25, 25},
+                                  {0, 0, 0, 0, 1.989e30, gfx::createTexture("./gfx/sun.bmp"), 100, 100},
+                                  {1.505e8, 0, 0, 1.036e6, 500000, gfx::createTexture("./gfx/sun.bmp"), 5, 5}};
 
 	/* program main loop */
 	while (!(input::getKeyState(SDLK_ESCAPE) || input::getQuit())) {
