@@ -7,11 +7,19 @@
 #include "general.h"
 #include "body.h"
 #include <iostream>
-#define screenw 640
-#define screenh 640//480
+
+const int screenw = 640;
+const int screenh = 640;
+
+double viewPortX = 0;
+double viewPortY = 0;
+double viewPortW = 5e11;
+double viewPortH = 5e11;
 
 const int numBodies = 4;
-const double timeStep = 5e4;//1e8;
+double timeStep = 5e4;
+
+double totalTime = 0;
 
 void addForces(Body inputBodies[]) {
 	for (int i = 0; i < numBodies; i++) {
@@ -20,11 +28,13 @@ void addForces(Body inputBodies[]) {
 			if (i != j) inputBodies[i].addForce(inputBodies[j]);
 		}	
 	}
+}
 
+void updateBodies(Body inputBodies[]) {
 	for (int i = 0; i < numBodies; i++) {
 		inputBodies[i].update(timeStep); //Update with Timestep
-		inputBodies[i].drawBody(screenw, screenh, 0, 0, 5e8*1000, 5e8*1000);
-	}	
+		inputBodies[i].drawBody(screenw, screenh, viewPortX, viewPortY, viewPortW, viewPortH);
+	}
 }
 
 int main ( int argc, char** argv ) {
@@ -42,11 +52,17 @@ int main ( int argc, char** argv ) {
 		//Main Logic
 		addForces(bodies);
 
-		/*for (int i = 0; i < numBodies; i++) {
-			bodies[i].drawBody(screenw, screenh, 0, 0, 5e8*1000, 5e8*1000:);
-		}*/	
+		if (1==0) {
+			bodies[3].rx = bodies[1].rx + 1000;
+			bodies[3].ry = bodies[1].ry + 1000;
+			//bodies[3].vx = 0;
+			//bodies[3].vy = 0;	
+		}
+
+		updateBodies(bodies);
 		//End Main Logic
 		//SDL_Delay(1);
+		totalTime += timeStep;
 		gfx::update();
 }
 
