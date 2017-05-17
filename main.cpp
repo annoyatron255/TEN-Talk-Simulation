@@ -33,6 +33,11 @@ void addForces(Body inputBodies[]) {
 void updateBodies(Body inputBodies[]) {
 	for (int i = 0; i < numBodies; i++) {
 		inputBodies[i].update(timeStep); //Update with Timestep
+	}
+}
+
+void drawBodies(Body inputBodies[]) {
+	for (int i = 0; i < numBodies; i++) {
 		inputBodies[i].drawBody(screenw, screenh, viewPortX, viewPortY, viewPortW, viewPortH);
 	}
 }
@@ -51,7 +56,7 @@ int main ( int argc, char** argv ) {
 
 		//Main Logic
 		addForces(bodies);
-
+		//Manually Modifiy Force, Velocity, and Coord. Here
 		if (1==0) {
 			bodies[3].rx = bodies[1].rx + 1000;
 			bodies[3].ry = bodies[1].ry + 1000;
@@ -60,11 +65,13 @@ int main ( int argc, char** argv ) {
 		}
 
 		updateBodies(bodies);
+		//Modify Viewport Here
+		drawBodies(bodies);
 		//End Main Logic
 		//SDL_Delay(1);
 		totalTime += timeStep;
 		gfx::update();
-}
+	}
 
 	gfx::close();
 
