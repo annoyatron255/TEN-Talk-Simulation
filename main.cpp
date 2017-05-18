@@ -17,7 +17,7 @@ double viewPortW = 5e11;
 double viewPortH = 5e11;
 
 const int numBodies = 4;
-double timeStep = 5e4;
+double timeStep = 5e4; //Number of Seconds Elapsed in One Frame (Generally 1/60 of a Second)
 
 double totalTime = 0;
 
@@ -50,6 +50,8 @@ int main ( int argc, char** argv ) {
                                   {0, 0, 0, 0, 1.989e30, gfx::createTexture("./gfx/sun.bmp"), 100, 100},
                                   {1.505e11, 0, 0, 32730, 500, gfx::createTexture("./gfx/sun.bmp"), 5, 5}};
 
+
+	gfx::clearScreen(0, 0, 0);
 	/* program main loop */
 	while (!(input::getKeyState(SDLK_ESCAPE) || input::getQuit())) {
 		gfx::clearScreen(0, 0, 0);
@@ -57,18 +59,30 @@ int main ( int argc, char** argv ) {
 		//Main Logic
 		addForces(bodies);
 		//Manually Modifiy Force, Velocity, and Coord. Here
-		if (1==0) {
+		if (totalTime > 2.23775e7 && totalTime < 66500000) {
 			bodies[3].rx = bodies[1].rx + 1000;
 			bodies[3].ry = bodies[1].ry + 1000;
-			//bodies[3].vx = 0;
-			//bodies[3].vy = 0;	
+			bodies[3].vx = 0;
+			bodies[3].vy = 0;	
+		} else if (totalTime >= 66500000 && totalTime < 66500000 + timeStep) {
+			bodies[3].rx = bodies[1].rx + 600000000;
+			bodies[3].ry = bodies[1].ry;
+			bodies[3].vx = -21435;
+			bodies[3].vy = -1461;
+		} else if (totalTime > 66500000 + timeStep + 2e7) {
+			bodies[3].rx = bodies[0].rx + 1000;
+			bodies[3].ry = bodies[0].ry + 1000;
+			bodies[3].vx = 0;
+			bodies[3].vy = 0;
 		}
 
 		updateBodies(bodies);
+		//SDL_Log("Mars X: %f Y: %f VX: %f VY: %f", bodies[1].rx, bodies[1].ry, bodies[1].vx, bodies[1].vy);
+		//SDL_Log("Time: %f", totalTime);
+		//SDL_Log("Angle: %f", acos(((bodies[0].rx * bodies[1].rx) + (bodies[0].ry * bodies[1].ry))/(1.496e11 * 2.279e11)) * 180 / 3.141592654);
 		//Modify Viewport Here
 		drawBodies(bodies);
 		//End Main Logic
-		//SDL_Delay(1);
 		totalTime += timeStep;
 		gfx::update();
 	}
