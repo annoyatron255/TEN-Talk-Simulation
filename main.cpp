@@ -59,17 +59,20 @@ int main ( int argc, char** argv ) {
 		//Main Logic
 		addForces(bodies);
 		//Manually Modifiy Force, Velocity, and Coord. Here
-		if (totalTime > 2.23775e7 && totalTime < 66500000) {
+		double TOF = 22375000;
+		//double timeToReturn = 66500000;
+		double timeToReturn = 61550000;
+		if (totalTime > TOF && totalTime < timeToReturn) {
 			bodies[3].rx = bodies[1].rx + 1000;
 			bodies[3].ry = bodies[1].ry + 1000;
 			bodies[3].vx = 0;
 			bodies[3].vy = 0;	
-		} else if (totalTime >= 66500000 && totalTime < 66500000 + timeStep) {
+		} else if (totalTime >= timeToReturn && totalTime < timeToReturn + timeStep) {
 			bodies[3].rx = bodies[1].rx + 600000000;
 			bodies[3].ry = bodies[1].ry;
-			bodies[3].vx = -21435;
-			bodies[3].vy = -1461;
-		} else if (totalTime > 66500000 + timeStep + 2e7) {
+			bodies[3].vx = -18240;//-21435;
+			bodies[3].vy = 11354;//-1461;
+		} else if (totalTime > timeToReturn + timeStep + TOF) {
 			bodies[3].rx = bodies[0].rx + 1000;
 			bodies[3].ry = bodies[0].ry + 1000;
 			bodies[3].vx = 0;
