@@ -8,8 +8,8 @@
 #include "body.h"
 #include <iostream>
 
-const int screenw = 640;
-const int screenh = 640;
+const int screenw = 720;//640;
+const int screenh = 720;//640;
 
 double viewPortX = 0;
 double viewPortY = 0;
@@ -108,8 +108,9 @@ int main ( int argc, char** argv ) {
 			trail[trailIndex].y = bodies[3].bodyRect.y + bodies[3].bodyRect.h / 2;
 			trailIndex++;
 		}
-		for (int i = 0; i < trailIndex; i++) {
-			gfx::drawPoint(trail[i].x, trail[i].y, trailColor[i].r, trailColor[i].g, trailColor[i].b);
+		for (int i = 1; i < trailIndex; i++) {
+			gfx::drawLine(trail[i].x, trail[i].y, trail[i-1].x, trail[i-1].y, trailColor[i].r, trailColor[i].g, trailColor[i].b);
+			//gfx::drawPoint(trail[i].x, trail[i].y, trailColor[i].r, trailColor[i].g, trailColor[i].b);
 		}
 		//End Main Logic
 		totalTime += timeStep;
