@@ -90,12 +90,14 @@ int main ( int argc, char** argv ) {
 		//SDL_Log("Angle: %f", acos(((bodies[0].rx * bodies[1].rx) + (bodies[0].ry * bodies[1].ry))/(1.496e11 * 2.279e11)) * 180 / 3.141592654);
 		//Modify Viewport Here
 		drawBodies(bodies);
-		trail[trailIndex].x = bodies[3].bodyRect.x + bodies[3].bodyRect.w / 2;
-		trail[trailIndex].y = bodies[3].bodyRect.y + bodies[3].bodyRect.h / 2;
+		if ( totalTime < timeToReturn + timeStep + TOF) {
+			trail[trailIndex].x = bodies[3].bodyRect.x + bodies[3].bodyRect.w / 2;
+			trail[trailIndex].y = bodies[3].bodyRect.y + bodies[3].bodyRect.h / 2;
+			trailIndex++;
+		}
 		for (int i = 0; i < trailIndex; i++) {
 			gfx::drawPoint(trail[i].x, trail[i].y, 255, 255, 255);
 		}
-		trailIndex++;
 		//End Main Logic
 		totalTime += timeStep;
 		gfx::update();
