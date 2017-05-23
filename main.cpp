@@ -48,7 +48,7 @@ int main ( int argc, char** argv ) {
 	gfx::gfxinit(screenw, screenh); // open window with 640x480 res. 
 
 	SDL_Point trail[10000];
-
+	SDL_Color trailColor[10000];
 
 	Body bodies[numBodies] = {{1.496e11, 0, 0, 29783, 5.972e24, gfx::createTexture("./gfx/earth.bmp"), 32, 32},
                                   {1.639e11, 1.583e11, -16762, 17358, 6.39e23, gfx::createTexture("./gfx/mars.bmp"), 25, 25},
@@ -67,16 +67,29 @@ int main ( int argc, char** argv ) {
 		double TOF = 22375000;
 		//double timeToReturn = 66500000;
 		double timeToReturn = 61550000;
-		if (totalTime > TOF && totalTime < timeToReturn) {
+
+		trailColor[trailIndex] = trailColor[trailIndex-1];
+
+		if (totalTime < TOF) {
+			trailColor[trailIndex].r = 255;
+			trailColor[trailIndex].g = 255;
+			trailColor[trailIndex].b = 255;
+		} else if (totalTime > TOF && totalTime < timeToReturn) {
 			bodies[3].rx = bodies[1].rx + 1000;
 			bodies[3].ry = bodies[1].ry + 1000;
 			bodies[3].vx = 0;
-			bodies[3].vy = 0;	
+			bodies[3].vy = 0;
+			trailColor[trailIndex].r = 255;
+			trailColor[trailIndex].g = 0;
+			trailColor[trailIndex].b = 0;
 		} else if (totalTime >= timeToReturn && totalTime < timeToReturn + timeStep) {
 			bodies[3].rx = bodies[1].rx + 600000000;
 			bodies[3].ry = bodies[1].ry;
 			bodies[3].vx = -18240;//-21435;
 			bodies[3].vy = 11354;//-1461;
+			trailColor[trailIndex].r = 0;
+			trailColor[trailIndex].g = 255;
+			trailColor[trailIndex].b = 0;
 		} else if (totalTime > timeToReturn + timeStep + TOF) {
 			bodies[3].rx = bodies[0].rx + 1000;
 			bodies[3].ry = bodies[0].ry + 1000;
@@ -96,7 +109,7 @@ int main ( int argc, char** argv ) {
 			trailIndex++;
 		}
 		for (int i = 0; i < trailIndex; i++) {
-			gfx::drawPoint(trail[i].x, trail[i].y, 255, 255, 255);
+			gfx::drawPoint(trail[i].x, trail[i].y, trailColor[i].r, trailColor[i].g, trailColor[i].b);
 		}
 		//End Main Logic
 		totalTime += timeStep;
