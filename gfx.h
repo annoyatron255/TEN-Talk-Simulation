@@ -15,6 +15,8 @@ namespace gfx {
 	void drawTexture(SDL_Texture* texture, SDL_Rect rect);
 	void drawLine(int x1, int y1, int x2, int y2, int r, int g, int b);
 
+	void drawPoint(int x, int y, int r, int g, int b);
+
 	void close();
 }
 

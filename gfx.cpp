@@ -72,6 +72,11 @@ namespace gfx {
 		SDL_RenderDrawLine(m_gRenderer, x1, y1, x2, y2);
 	}
 
+	void drawPoint(int x, int y, int r, int g, int b) {
+		SDL_SetRenderDrawColor( m_gRenderer, r, g, b, 0xFF );
+		SDL_RenderDrawPoint(m_gRenderer, x, y);
+	}
+
 	void close() {
 		SDL_DestroyRenderer( m_gRenderer);
 		SDL_DestroyWindow( m_window );

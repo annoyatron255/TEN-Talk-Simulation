@@ -21,6 +21,8 @@ double timeStep = 5e4; //Number of Seconds Elapsed in One Frame (Generally 1/60 
 
 double totalTime = 0;
 
+long trailIndex = 0;
+
 void addForces(Body inputBodies[]) {
 	for (int i = 0; i < numBodies; i++) {
 		inputBodies[i].resetForce();
@@ -44,6 +46,9 @@ void drawBodies(Body inputBodies[]) {
 
 int main ( int argc, char** argv ) {
 	gfx::gfxinit(screenw, screenh); // open window with 640x480 res. 
+
+	SDL_Point trail[10000];
+
 
 	Body bodies[numBodies] = {{1.496e11, 0, 0, 29783, 5.972e24, gfx::createTexture("./gfx/earth.bmp"), 32, 32},
                                   {1.639e11, 1.583e11, -16762, 17358, 6.39e23, gfx::createTexture("./gfx/mars.bmp"), 25, 25},
@@ -85,6 +90,12 @@ int main ( int argc, char** argv ) {
 		//SDL_Log("Angle: %f", acos(((bodies[0].rx * bodies[1].rx) + (bodies[0].ry * bodies[1].ry))/(1.496e11 * 2.279e11)) * 180 / 3.141592654);
 		//Modify Viewport Here
 		drawBodies(bodies);
+		trail[trailIndex].x = bodies[3].bodyRect.x + bodies[3].bodyRect.w / 2;
+		trail[trailIndex].y = bodies[3].bodyRect.y + bodies[3].bodyRect.h / 2;
+		for (int i = 0; i < trailIndex; i++) {
+			gfx::drawPoint(trail[i].x, trail[i].y, 255, 255, 255);
+		}
+		trailIndex++;
 		//End Main Logic
 		totalTime += timeStep;
 		gfx::update();
