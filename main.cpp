@@ -113,6 +113,7 @@ int main ( int argc, char** argv ) {
 		}
 		//End Main Logic
 		totalTime += timeStep;
+		SDL_Delay(1);
 		gfx::update();
 	}
 
