@@ -18,13 +18,15 @@ double viewPortH = 5e11;
 
 
 const int numBodies = 4;
-double timeStep = 5e4; //Number of Seconds Elapsed in One Frame (Generally 1/60 of a Second)
+double timeStep = 5e4/2; //Number of Seconds Elapsed in One Frame (Generally 1/60 of a Second)
 
 double totalTime = 0;
 
 long trailIndex = 0;
-SDL_Point earthOrbitPoints[1500];
-SDL_Point marsOrbitPoints[1500];
+
+const int orbitSize = 3000;
+SDL_Point earthOrbitPoints[orbitSize];
+SDL_Point marsOrbitPoints[orbitSize];
 
 void addForces(Body inputBodies[], int length) {
 	for (int i = 0; i < length; i++) {
@@ -55,7 +57,7 @@ void drawInitialOrbits(Body inputBodies[]) {
 		inputBodies[0],inputBodies[1], inputBodies[2]
 	};
 
-	for (int i = 0; i < 1500; i++) {
+	for (int i = 0; i < orbitSize; i++) {
 
 		//std::cout << "x: "<<bodyArray[1].rx<<"\n";
 
@@ -93,7 +95,7 @@ int main ( int argc, char** argv ) {
 		//Main Logic
 		addForces(bodies,numBodies);
 
-		for(int i = 1; i < 1500; i++){
+		for(int i = 1; i < orbitSize; i++){
 			gfx::drawLine(earthOrbitPoints[i].x,earthOrbitPoints[i].y,earthOrbitPoints[i-1].x,earthOrbitPoints[i-1].y,85, 85, 85);
 			gfx::drawLine(marsOrbitPoints[i].x,marsOrbitPoints[i].y,marsOrbitPoints[i-1].x,marsOrbitPoints[i-1].y,85, 85, 85);
 		}
