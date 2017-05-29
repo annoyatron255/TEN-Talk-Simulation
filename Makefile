@@ -13,7 +13,7 @@ ifeq ($(UNAME), Linux)
 LIBS=-lSDL2
 endif
 ifeq ($(UNAME), Darwin)
-LIBS=-F/Users/`whoami`/Library/Frameworks/ -framework SDL2
+LIBS=-F/Users/`whoami`/Library/Frameworks/ -framework SDL2 -framework SDL2_ttf
 endif
 
 make:
