@@ -43,36 +43,32 @@ void updateBodies(Body inputBodies[], int length) {
 }
 
 void drawBodies(Body inputBodies[], int length) {
-    for (int i = 0; i < length; i++) {
-        inputBodies[i].updateBody(screenw, screenh, viewPortX, viewPortY, viewPortW, viewPortH);
-        inputBodies[i].drawBody();
-    }
+	for (int i = 0; i < length; i++) {
+		inputBodies[i].updateBody(screenw, screenh, viewPortX, viewPortY, viewPortW, viewPortH);
+		inputBodies[i].drawBody();
+	}
 }
 
 void drawInitialOrbits(Body inputBodies[]) {
 
-    Body bodyArray[3] = {
-            inputBodies[0],inputBodies[1], inputBodies[2]
-            /*
-            {1.496e11, 0, 0, 29783, 5.972e24, gfx::createTexture("./gfx/earth.bmp"), 32, 32},
-            {1.639e11, 1.583e11, -16762, 17358, 6.39e23, gfx::createTexture("./gfx/mars.bmp"), 25, 25},
-            {0, 0, 0, 0, 1.989e30, gfx::createTexture("./gfx/sun.bmp"), 100, 100}*/
-    };
+	Body bodyArray[3] = {
+		inputBodies[0],inputBodies[1], inputBodies[2]
+	};
 
-    for (int i = 0; i < 1500; i++) {
+	for (int i = 0; i < 1500; i++) {
 
-        //std::cout << "x: "<<bodyArray[1].rx<<"\n";
+		//std::cout << "x: "<<bodyArray[1].rx<<"\n";
 
-        addForces(bodyArray,3);
-        updateBodies(bodyArray,3);
+		addForces(bodyArray,3);
+		updateBodies(bodyArray,3);
 
-        bodyArray[0].updateBody(screenw, screenh, viewPortX, viewPortY, viewPortW, viewPortH);
-        earthOrbitPoints[i].x=bodyArray[0].bodyRect.x + bodyArray[0].bodyRect.w/2;
-        earthOrbitPoints[i].y=bodyArray[0].bodyRect.y + bodyArray[0].bodyRect.h/2;
-        bodyArray[1].updateBody(screenw, screenh, viewPortX, viewPortY, viewPortW, viewPortH);
-        marsOrbitPoints[i].x=bodyArray[1].bodyRect.x + bodyArray[1].bodyRect.w/2;
-        marsOrbitPoints[i].y=bodyArray[1].bodyRect.y + bodyArray[1].bodyRect.h/2;
-    }
+		bodyArray[0].updateBody(screenw, screenh, viewPortX, viewPortY, viewPortW, viewPortH);
+		earthOrbitPoints[i].x=bodyArray[0].bodyRect.x + bodyArray[0].bodyRect.w/2;
+		earthOrbitPoints[i].y=bodyArray[0].bodyRect.y + bodyArray[0].bodyRect.h/2;
+		bodyArray[1].updateBody(screenw, screenh, viewPortX, viewPortY, viewPortW, viewPortH);
+		marsOrbitPoints[i].x=bodyArray[1].bodyRect.x + bodyArray[1].bodyRect.w/2;
+		marsOrbitPoints[i].y=bodyArray[1].bodyRect.y + bodyArray[1].bodyRect.h/2;
+	}
 }
 
 int main ( int argc, char** argv ) {
@@ -82,13 +78,13 @@ int main ( int argc, char** argv ) {
 	SDL_Color trailColor[10000];
 
 	Body bodies[numBodies] = {{1.496e11, 0, 0, 29783, 5.972e24, gfx::createTexture("./gfx/earth.bmp"), 32, 32},
-                                  {1.639e11, 1.583e11, -16762, 17358, 6.39e23, gfx::createTexture("./gfx/mars.bmp"), 25, 25},
-                                  {0, 0, 0, 0, 1.989e30, gfx::createTexture("./gfx/sun.bmp"), 100, 100},
-                                  {1.505e11, 0, 0, 32730, 500, gfx::createTexture("./gfx/sun.bmp"), 5, 5}};
+		{1.639e11, 1.583e11, -16762, 17358, 6.39e23, gfx::createTexture("./gfx/mars.bmp"), 25, 25},
+		{0, 0, 0, 0, 1.989e30, gfx::createTexture("./gfx/sun.bmp"), 100, 100},
+		{1.505e11, 0, 0, 32730, 500, gfx::createTexture("./gfx/sun.bmp"), 5, 5}};
 
-    drawInitialOrbits(bodies);
+	drawInitialOrbits(bodies);
 	gfx::clearScreen(0, 0, 0);
-	
+
 	gfx::setFont("./FiraMono-Regular.ttf", 22);
 	/* program main loop */
 	while (!(input::getKeyState(SDLK_ESCAPE) || input::getQuit())) {
@@ -97,10 +93,10 @@ int main ( int argc, char** argv ) {
 		//Main Logic
 		addForces(bodies,numBodies);
 
-        for(int i = 1; i < 1500; i++){
-            gfx::drawLine(earthOrbitPoints[i].x,earthOrbitPoints[i].y,earthOrbitPoints[i-1].x,earthOrbitPoints[i-1].y,85, 85, 85);
-            gfx::drawLine(marsOrbitPoints[i].x,marsOrbitPoints[i].y,marsOrbitPoints[i-1].x,marsOrbitPoints[i-1].y,85, 85, 85);
-        }
+		for(int i = 1; i < 1500; i++){
+			gfx::drawLine(earthOrbitPoints[i].x,earthOrbitPoints[i].y,earthOrbitPoints[i-1].x,earthOrbitPoints[i-1].y,85, 85, 85);
+			gfx::drawLine(marsOrbitPoints[i].x,marsOrbitPoints[i].y,marsOrbitPoints[i-1].x,marsOrbitPoints[i-1].y,85, 85, 85);
+		}
 
 		//Manually Modifiy Force, Velocity, and Coord. Here
 		double TOF = 22375000;
