@@ -57,6 +57,8 @@ int main ( int argc, char** argv ) {
 
 
 	gfx::clearScreen(0, 0, 0);
+	
+	gfx::setFont("./FiraMono-Regular.ttf", 22);
 	/* program main loop */
 	while (!(input::getKeyState(SDLK_ESCAPE) || input::getQuit())) {
 		gfx::clearScreen(0, 0, 0);
@@ -115,6 +117,7 @@ int main ( int argc, char** argv ) {
 		//End Main Logic
 		totalTime += timeStep;
 		SDL_Delay(1);
+		//gfx::drawText("Hello, World!", 50, 50, 255, 0, 0);
 		gfx::update();
 	}
 

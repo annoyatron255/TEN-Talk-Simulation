@@ -7,6 +7,8 @@
 SDL_Window* m_window;
 SDL_Renderer* m_gRenderer;
 
+TTF_Font *gFont;
+
 namespace gfx {
 	int gfxinit(int w,int h) {
 		if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
@@ -28,6 +30,7 @@ namespace gfx {
 					return 1;
 				}
 			}
+			TTF_Init();
 		}
 		return 0;
 	}
@@ -45,7 +48,7 @@ namespace gfx {
 		SDL_SetRenderDrawColor( m_gRenderer, r, g, b, 0xFF );
 		SDL_RenderFillRect( m_gRenderer, &rect );
 	}
-
+	
 	SDL_Texture* createTexture(const char* file) {
 		SDL_Surface* surface = NULL;
 		SDL_Texture* texture = NULL;
@@ -76,7 +79,31 @@ namespace gfx {
 		SDL_SetRenderDrawColor( m_gRenderer, r, g, b, 0xFF );
 		SDL_RenderDrawPoint(m_gRenderer, x, y);
 	}
+	
+	void setFont(const char* fontFile, int size) {
+		gFont = TTF_OpenFont( fontFile, size );
+	}
+	
+	void drawText(const char* text, int x, int y, int r, int g, int b) {
+		
+		SDL_Surface* surface = NULL;
+		SDL_Texture* texture = NULL;
 
+		SDL_Color color = {(Uint8)r, (Uint8)g, (Uint8)b};
+
+		surface = TTF_RenderText_Solid( gFont, text, color );
+
+		texture = SDL_CreateTextureFromSurface(m_gRenderer, surface);
+
+		SDL_Rect textRect = {x, y, surface->w, surface->h};		
+
+		SDL_FreeSurface(surface);
+
+		drawTexture(texture, textRect);
+	
+		SDL_DestroyTexture(texture);
+	}
+	
 	void close() {
 		SDL_DestroyRenderer( m_gRenderer);
 		SDL_DestroyWindow( m_window );
