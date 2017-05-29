@@ -16,32 +16,63 @@ double viewPortY = 0;
 double viewPortW = 5e11;
 double viewPortH = 5e11;
 
+
 const int numBodies = 4;
 double timeStep = 5e4; //Number of Seconds Elapsed in One Frame (Generally 1/60 of a Second)
 
 double totalTime = 0;
 
 long trailIndex = 0;
+SDL_Point earthOrbitPoints[1500];
+SDL_Point marsOrbitPoints[1500];
 
-void addForces(Body inputBodies[]) {
-	for (int i = 0; i < numBodies; i++) {
+void addForces(Body inputBodies[], int length) {
+	for (int i = 0; i < length; i++) {
 		inputBodies[i].resetForce();
-		for (int j = 0; j < numBodies; j++) {
+		for (int j = 0; j < length; j++) {
 			if (i != j) inputBodies[i].addForce(inputBodies[j]);
 		}	
 	}
 }
 
-void updateBodies(Body inputBodies[]) {
-	for (int i = 0; i < numBodies; i++) {
+
+void updateBodies(Body inputBodies[], int length) {
+	for (int i = 0; i < length; i++) {
 		inputBodies[i].update(timeStep); //Update with Timestep
 	}
 }
 
-void drawBodies(Body inputBodies[]) {
-	for (int i = 0; i < numBodies; i++) {
-		inputBodies[i].drawBody(screenw, screenh, viewPortX, viewPortY, viewPortW, viewPortH);
-	}
+void drawBodies(Body inputBodies[], int length) {
+    for (int i = 0; i < length; i++) {
+        inputBodies[i].updateBody(screenw, screenh, viewPortX, viewPortY, viewPortW, viewPortH);
+        inputBodies[i].drawBody();
+    }
+}
+
+void drawInitialOrbits(Body inputBodies[]) {
+
+    Body bodyArray[3] = {
+            inputBodies[0],inputBodies[1], inputBodies[2]
+            /*
+            {1.496e11, 0, 0, 29783, 5.972e24, gfx::createTexture("./gfx/earth.bmp"), 32, 32},
+            {1.639e11, 1.583e11, -16762, 17358, 6.39e23, gfx::createTexture("./gfx/mars.bmp"), 25, 25},
+            {0, 0, 0, 0, 1.989e30, gfx::createTexture("./gfx/sun.bmp"), 100, 100}*/
+    };
+
+    for (int i = 0; i < 1500; i++) {
+
+        //std::cout << "x: "<<bodyArray[1].rx<<"\n";
+
+        addForces(bodyArray,3);
+        updateBodies(bodyArray,3);
+
+        bodyArray[0].updateBody(screenw, screenh, viewPortX, viewPortY, viewPortW, viewPortH);
+        earthOrbitPoints[i].x=bodyArray[0].bodyRect.x + bodyArray[0].bodyRect.w/2;
+        earthOrbitPoints[i].y=bodyArray[0].bodyRect.y + bodyArray[0].bodyRect.h/2;
+        bodyArray[1].updateBody(screenw, screenh, viewPortX, viewPortY, viewPortW, viewPortH);
+        marsOrbitPoints[i].x=bodyArray[1].bodyRect.x + bodyArray[1].bodyRect.w/2;
+        marsOrbitPoints[i].y=bodyArray[1].bodyRect.y + bodyArray[1].bodyRect.h/2;
+    }
 }
 
 int main ( int argc, char** argv ) {
@@ -55,7 +86,7 @@ int main ( int argc, char** argv ) {
                                   {0, 0, 0, 0, 1.989e30, gfx::createTexture("./gfx/sun.bmp"), 100, 100},
                                   {1.505e11, 0, 0, 32730, 500, gfx::createTexture("./gfx/sun.bmp"), 5, 5}};
 
-
+    drawInitialOrbits(bodies);
 	gfx::clearScreen(0, 0, 0);
 	
 	gfx::setFont("./FiraMono-Regular.ttf", 22);
@@ -64,7 +95,13 @@ int main ( int argc, char** argv ) {
 		gfx::clearScreen(0, 0, 0);
 
 		//Main Logic
-		addForces(bodies);
+		addForces(bodies,numBodies);
+
+        for(int i = 1; i < 1500; i++){
+            gfx::drawLine(earthOrbitPoints[i].x,earthOrbitPoints[i].y,earthOrbitPoints[i-1].x,earthOrbitPoints[i-1].y,85, 85, 85);
+            gfx::drawLine(marsOrbitPoints[i].x,marsOrbitPoints[i].y,marsOrbitPoints[i-1].x,marsOrbitPoints[i-1].y,85, 85, 85);
+        }
+
 		//Manually Modifiy Force, Velocity, and Coord. Here
 		double TOF = 22375000;
 		//double timeToReturn = 66500000;
@@ -99,12 +136,12 @@ int main ( int argc, char** argv ) {
 			bodies[3].vy = 0;
 		}
 
-		updateBodies(bodies);
+		updateBodies(bodies,numBodies);
 		//SDL_Log("Mars X: %f Y: %f VX: %f VY: %f", bodies[1].rx, bodies[1].ry, bodies[1].vx, bodies[1].vy);
 		//SDL_Log("Time: %f", totalTime);
 		//SDL_Log("Angle: %f", acos(((bodies[0].rx * bodies[1].rx) + (bodies[0].ry * bodies[1].ry))/(1.496e11 * 2.279e11)) * 180 / 3.141592654);
 		//Modify Viewport Here
-		drawBodies(bodies);
+		drawBodies(bodies,numBodies);
 		if ( totalTime < timeToReturn + timeStep + TOF) {
 			trail[trailIndex].x = bodies[3].bodyRect.x + bodies[3].bodyRect.w / 2;
 			trail[trailIndex].y = bodies[3].bodyRect.y + bodies[3].bodyRect.h / 2;

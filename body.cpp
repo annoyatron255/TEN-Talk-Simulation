@@ -46,11 +46,13 @@ void Body::addForce(Body b) {
 	fy += F * dy / dist;
 }
 
-void Body::drawBody(int screenw, int screenh, double vpx, double vpy, double vpw, double vph) {
-	double wRadius = (vpw / 2);
-	double hRadius = (vph / 2);
-	bodyRect.x = (int)round(screenw * (rx - (vpx - wRadius)) / ((vpx + wRadius) - (vpx - wRadius))) - (bodyRect.w / 2);
-	bodyRect.y = (int)round(screenh * (ry - (vpy - hRadius)) / ((vpy + hRadius) - (vpy - hRadius))) - (bodyRect.h / 2);
+void Body::updateBody(int screenw, int screenh, double vpx, double vpy, double vpw, double vph){
+    double wRadius = (vpw / 2);
+    double hRadius = (vph / 2);
+    bodyRect.x = (int)round(screenw * (rx - (vpx - wRadius)) / ((vpx + wRadius) - (vpx - wRadius))) - (bodyRect.w / 2);
+    bodyRect.y = (int)round(screenh * (ry - (vpy - hRadius)) / ((vpy + hRadius) - (vpy - hRadius))) - (bodyRect.h / 2);
+}
 
+void Body::drawBody() {
 	gfx::drawTexture(bodyTexture, bodyRect);
 }
