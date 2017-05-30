@@ -81,6 +81,7 @@ namespace gfx {
 	}
 	
 	void setFont(const char* fontFile, int size) {
+		TTF_CloseFont(gFont);
 		gFont = TTF_OpenFont( fontFile, size );
 	}
 	
@@ -91,7 +92,8 @@ namespace gfx {
 
 		SDL_Color color = {(Uint8)r, (Uint8)g, (Uint8)b};
 
-		surface = TTF_RenderText_Solid( gFont, text, color );
+		//surface = TTF_RenderText_Solid( gFont, text, color );
+		surface = TTF_RenderText_Blended( gFont, text, color );
 
 		texture = SDL_CreateTextureFromSurface(m_gRenderer, surface);
 

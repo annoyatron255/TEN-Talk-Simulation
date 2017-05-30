@@ -28,6 +28,8 @@ const int orbitSize = 3000;
 SDL_Point earthOrbitPoints[orbitSize];
 SDL_Point marsOrbitPoints[orbitSize];
 
+bool paused = false;
+
 void addForces(Body inputBodies[], int length) {
 	for (int i = 0; i < length; i++) {
 		inputBodies[i].resetForce();
@@ -54,22 +56,19 @@ void drawBodies(Body inputBodies[], int length) {
 void drawInitialOrbits(Body inputBodies[]) {
 
 	Body bodyArray[3] = {
-		inputBodies[0],inputBodies[1], inputBodies[2]
+		inputBodies[0], inputBodies[1], inputBodies[2]
 	};
 
 	for (int i = 0; i < orbitSize; i++) {
-
-		//std::cout << "x: "<<bodyArray[1].rx<<"\n";
-
-		addForces(bodyArray,3);
-		updateBodies(bodyArray,3);
+		addForces(bodyArray, 3);
+		updateBodies(bodyArray, 3);
 
 		bodyArray[0].updateBody(screenw, screenh, viewPortX, viewPortY, viewPortW, viewPortH);
-		earthOrbitPoints[i].x=bodyArray[0].bodyRect.x + bodyArray[0].bodyRect.w/2;
-		earthOrbitPoints[i].y=bodyArray[0].bodyRect.y + bodyArray[0].bodyRect.h/2;
+		earthOrbitPoints[i].x = bodyArray[0].bodyRect.x + bodyArray[0].bodyRect.w / 2;
+		earthOrbitPoints[i].y = bodyArray[0].bodyRect.y + bodyArray[0].bodyRect.h / 2;
 		bodyArray[1].updateBody(screenw, screenh, viewPortX, viewPortY, viewPortW, viewPortH);
-		marsOrbitPoints[i].x=bodyArray[1].bodyRect.x + bodyArray[1].bodyRect.w/2;
-		marsOrbitPoints[i].y=bodyArray[1].bodyRect.y + bodyArray[1].bodyRect.h/2;
+		marsOrbitPoints[i].x = bodyArray[1].bodyRect.x + bodyArray[1].bodyRect.w / 2;
+		marsOrbitPoints[i].y = bodyArray[1].bodyRect.y + bodyArray[1].bodyRect.h / 2;
 	}
 }
 
@@ -87,17 +86,21 @@ int main ( int argc, char** argv ) {
 	drawInitialOrbits(bodies);
 	gfx::clearScreen(0, 0, 0);
 
-	gfx::setFont("./FiraMono-Regular.ttf", 22);
+	gfx::setFont("./FiraMono-Regular.ttf", 18);
 	/* program main loop */
 	while (!(input::getKeyState(SDLK_ESCAPE) || input::getQuit())) {
 		gfx::clearScreen(0, 0, 0);
 
+		paused = input::getKeyState(SDLK_SPACE); //I'm buggy -- don't use me
+
 		//Main Logic
-		addForces(bodies,numBodies);
+		if (!paused) {
+			addForces(bodies, numBodies);
+		}
 
 		for(int i = 1; i < orbitSize; i++){
-			gfx::drawLine(earthOrbitPoints[i].x,earthOrbitPoints[i].y,earthOrbitPoints[i-1].x,earthOrbitPoints[i-1].y,85, 85, 85);
-			gfx::drawLine(marsOrbitPoints[i].x,marsOrbitPoints[i].y,marsOrbitPoints[i-1].x,marsOrbitPoints[i-1].y,85, 85, 85);
+			gfx::drawLine(earthOrbitPoints[i].x, earthOrbitPoints[i].y, earthOrbitPoints[i-1].x, earthOrbitPoints[i-1].y, 85, 85, 85);
+			gfx::drawLine(marsOrbitPoints[i].x, marsOrbitPoints[i].y, marsOrbitPoints[i-1].x, marsOrbitPoints[i-1].y, 85, 85, 85);
 		}
 
 		//Manually Modifiy Force, Velocity, and Coord. Here
@@ -108,7 +111,7 @@ int main ( int argc, char** argv ) {
 		trailColor[trailIndex] = trailColor[trailIndex-1];
 
 		if (totalTime < TOF) {
-			trailColor[trailIndex].r = 255;
+			trailColor[trailIndex].r = 0;//255;
 			trailColor[trailIndex].g = 255;
 			trailColor[trailIndex].b = 255;
 		} else if (totalTime > TOF && totalTime < timeToReturn) {
@@ -132,27 +135,64 @@ int main ( int argc, char** argv ) {
 			bodies[3].ry = bodies[0].ry + 1000;
 			bodies[3].vx = 0;
 			bodies[3].vy = 0;
+			paused = true;
 		}
-
-		updateBodies(bodies,numBodies);
+		if (!paused) {
+			updateBodies(bodies, numBodies);
+		}
 		//SDL_Log("Mars X: %f Y: %f VX: %f VY: %f", bodies[1].rx, bodies[1].ry, bodies[1].vx, bodies[1].vy);
 		//SDL_Log("Time: %f", totalTime);
 		//SDL_Log("Angle: %f", acos(((bodies[0].rx * bodies[1].rx) + (bodies[0].ry * bodies[1].ry))/(1.496e11 * 2.279e11)) * 180 / 3.141592654);
 		//Modify Viewport Here
-		drawBodies(bodies,numBodies);
-		if ( totalTime < timeToReturn + timeStep + TOF) {
+		for (int i = 1; i < trailIndex; i++) {
+			gfx::drawLine(trail[i].x, trail[i].y, trail[i-1].x, trail[i-1].y, trailColor[i].r, trailColor[i].g, trailColor[i].b);
+		}
+
+		drawBodies(bodies, numBodies);
+		if ( totalTime < timeToReturn + timeStep + TOF && !paused) {
 			trail[trailIndex].x = bodies[3].bodyRect.x + bodies[3].bodyRect.w / 2;
 			trail[trailIndex].y = bodies[3].bodyRect.y + bodies[3].bodyRect.h / 2;
 			trailIndex++;
 		}
-		for (int i = 1; i < trailIndex; i++) {
-			gfx::drawLine(trail[i].x, trail[i].y, trail[i-1].x, trail[i-1].y, trailColor[i].r, trailColor[i].g, trailColor[i].b);
-			//gfx::drawPoint(trail[i].x, trail[i].y, trailColor[i].r, trailColor[i].g, trailColor[i].b);
+
+		gfx::drawText("Earth", bodies[0].bodyRect.x - 10, bodies[0].bodyRect.y + bodies[0].bodyRect.h, 255, 255, 255);
+		gfx::drawText("Mars", bodies[1].bodyRect.x - 7, bodies[1].bodyRect.y + bodies[1].bodyRect.h, 255, 255, 255);
+		gfx::drawText("Sun", bodies[2].bodyRect.x + 35, bodies[2].bodyRect.y + bodies[2].bodyRect.h, 255, 255, 255);
+
+		/*SDL_PumpEvents();
+		int mousex;
+		int mousey;
+		SDL_GetMouseState(&mousex, &mousey);
+		SDL_Log("x: %d, y: %d", mousex, mousey);*/
+	
+		if (totalTime > TOF) {
+			gfx::drawText("259 Days", 260, 590, 0, 255, 255);			
 		}
+		if (totalTime > timeToReturn) {
+			gfx::drawText("453 Days", 320, 40, 255, 0, 0);			
+		}
+		if (totalTime > timeToReturn + TOF) {
+			gfx::drawText("259 Days", 140, 420, 0, 255, 0);
+		}
+
+		char totalTimeText[500] = "Total Time: ";	
+		char totalTimeString[500];
+		if (totalTime < timeToReturn + TOF) {
+			sprintf(totalTimeString, "%d", (int)(totalTime / 60 / 60 / 24));
+		}
+		strcat(totalTimeText, totalTimeString);
+		strcat(totalTimeText, " days");
+		gfx::drawText(totalTimeText, 10, 695, 255, 255, 255);	
+
+		gfx::setFont("./FiraMono-Regular.ttf", 12);
+		gfx::drawText("*Not Drawn To Scale", 575, 700, 255, 255, 255);
+		gfx::setFont("./FiraMono-Regular.ttf", 18);
+
 		//End Main Logic
-		totalTime += timeStep;
+		if (!paused) {
+			totalTime += timeStep;
+		}
 		SDL_Delay(1);
-		//gfx::drawText("Hello, World!", 50, 50, 255, 0, 0);
 		gfx::update();
 	}
 
